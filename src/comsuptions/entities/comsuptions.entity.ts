@@ -1,9 +1,8 @@
 import { IsInt, IsPositive } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column, Generated, ManyToOne } from 'typeorm';
-import { isInt } from 'validator';
-import { UserEntity } from './user.entity';
-import { BoothEntity } from './booth.entity';
-import { ProductsEntity } from './products.entity';
+import { Entity, PrimaryGeneratedColumn, Column, Generated, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { ProductsEntity } from 'src/products/entities/products.entity';
+import { BoothEntity } from 'src/booth/entities/booth.entity';
 
 
 export interface IComsuption {
@@ -21,8 +20,6 @@ export class ComsuptionsEntity implements IComsuption {
   @Generated('uuid')
   uuid: string;
 
-  @IsInt()
-  @IsPositive()
   @Column({name: 'year'})
   dateComsuption: number;
 
@@ -32,7 +29,8 @@ export class ComsuptionsEntity implements IComsuption {
   @ManyToOne(() => BoothEntity, booth => booth.comsuptions)
   booth: BoothEntity;
 
-  @ManyToOne(() => ProductsEntity, product => product.comsuptions)
+  @OneToOne(() => ProductsEntity, product => product.comsuptions)
+  @JoinColumn({name: 'product_id'})
   product: ProductsEntity
 
 }

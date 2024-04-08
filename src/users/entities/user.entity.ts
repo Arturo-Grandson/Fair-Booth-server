@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, Generated, ManyToMany, OneToMany } from 'typeorm';
-import { BoothEntity } from './booth.entity';
-import { ComsuptionsEntity } from './comsuption.entity';
+import { BoothEntity } from '../../booth/entities/booth.entity';
+import { ComsuptionsEntity } from '../../comsuptions/entities/comsuptions.entity';
 
 export interface IUserEntity{
   id: number;

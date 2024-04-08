@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, Generated, ManyToMany, OneToMany } from 'typeorm';
-import { UserEntity } from './user.entity';
-import { ComsuptionsEntity } from './comsuption.entity';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { ComsuptionsEntity } from 'src/comsuptions/entities/comsuptions.entity';
 
 export interface IBooth {
   id: number;

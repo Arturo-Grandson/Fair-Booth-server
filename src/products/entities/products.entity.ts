@@ -1,6 +1,6 @@
 import { IsIn } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column, Generated, OneToOne } from 'typeorm';
-import { ComsuptionsEntity } from './comsuption.entity';
+import { Entity, PrimaryGeneratedColumn, Column, Generated, OneToOne, OneToMany } from 'typeorm';
+import { ComsuptionsEntity } from 'src/comsuptions/entities/comsuptions.entity';
 
 export interface IProductsEntity {
   id: number;
@@ -30,6 +30,6 @@ export class ProductsEntity implements IProductsEntity {
   @Column('decimal', {precision: 5, scale: 2, name: 'price'})
   price: number;
 
-  @OneToOne(() => ComsuptionsEntity, comsuption => comsuption.product)
+  @OneToMany(() => ComsuptionsEntity, comsuption => comsuption.product)
   comsuptions: ComsuptionsEntity;
 }
