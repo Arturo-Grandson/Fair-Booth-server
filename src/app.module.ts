@@ -23,12 +23,12 @@ const ENTITIES = [BoothEntity, ComsuptionsEntity, ProductsEntity, UserEntity]
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       entities: [...ENTITIES],
-      synchronize: false
+      synchronize: true
     }),
     BoothModule,
     ComsuptionsModule,
     ProductsModule,
     UsersModule
-  ],
+  ]
 })
 export class AppModule {}

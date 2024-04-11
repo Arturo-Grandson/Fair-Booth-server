@@ -1,4 +1,3 @@
-import { IsInt, IsPositive } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, Generated, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { ProductsEntity } from 'src/products/entities/products.entity';
