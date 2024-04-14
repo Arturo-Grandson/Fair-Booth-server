@@ -8,6 +8,6 @@ import { ComsuptionsEntity } from './entities/comsuptions.entity';
   controllers: [ComsuptionsController],
   providers: [ComsuptionsService],
   imports: [TypeOrmModule.forFeature([ComsuptionsEntity])],
-  exports: [TypeOrmModule]
+  exports: [TypeOrmModule],
 })
 export class ComsuptionsModule {}
