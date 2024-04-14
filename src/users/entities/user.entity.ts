@@ -24,10 +24,10 @@ export class UserEntity implements IUserEntity {
   @Column({name: 'name'})
   name: string;
 
-  @Column({name: 'email'})
+  @Column({name: 'email', unique: true})
   email: string
 
-  @Column({name: 'phone'})
+  @Column({name: 'phone', unique: true})
   phone: string;
 
   @Column({name: 'pass'})

@@ -14,4 +14,7 @@ export class AddUserDto {
 
   @ApiProperty({required: false})
   pass: string = null as unknown as string;
+  
+  @ApiProperty({required: false})
+  boothUuid: string = null as unknown as string;
 }

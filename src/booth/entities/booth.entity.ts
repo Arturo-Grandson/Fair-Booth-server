@@ -24,7 +24,11 @@ export class BoothEntity implements IBooth{
   name: string;
 
   @ManyToMany(() => UserEntity, user => user.booths)
-  @JoinTable()
+  @JoinTable({
+    name: 'booth_users',
+    joinColumn: {name: 'booth_id', referencedColumnName: 'id'},
+    inverseJoinColumn: {name: 'user_id', referencedColumnName: 'id'}
+  })
   users: UserEntity[];
 
   @OneToMany(() => ComsuptionsEntity, comsuption => comsuption.booth)

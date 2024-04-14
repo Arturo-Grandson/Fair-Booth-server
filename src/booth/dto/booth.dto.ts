@@ -1,9 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger"
 import { BoothEntity } from "../entities/booth.entity"
+import { UserEntity } from "src/users/entities/user.entity"
+import { ComsuptionsEntity } from "src/comsuptions/entities/comsuptions.entity"
 
-export type TBoothDto = Omit<BoothEntity, 'id' | 'users' | 'comsuptions'>
+export type TBoothDto = Omit<BoothEntity, 'id'>
 
-export class BoothDto implements TBoothDto{
+export class BoothDto {
 
   constructor(data?: Partial<BoothDto>){
     if(data) Object.assign(this, data)
@@ -14,6 +16,12 @@ export class BoothDto implements TBoothDto{
 
   @ApiProperty({required: false})
   name: string = null as unknown as string
+
+  @ApiProperty({required: false})
+  users: UserEntity[] = [] as UserEntity[]
+
+  @ApiProperty({required: false})
+  comsuptions: ComsuptionsEntity[] = [] as ComsuptionsEntity[]
 
   static fromEntity(entity: BoothEntity): BoothDto {
     const dto = new BoothDto();
