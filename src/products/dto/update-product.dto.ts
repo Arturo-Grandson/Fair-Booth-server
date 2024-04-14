@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class AddBoothDto {
+export class UpdateProductoDto {
   @ApiProperty({ required: false })
-  name: string = null as unknown as string;
+  price: number = null as unknown as number;
 }

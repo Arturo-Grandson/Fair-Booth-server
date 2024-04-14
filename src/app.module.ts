@@ -10,7 +10,7 @@ import { ComsuptionsEntity } from './comsuptions/entities/comsuptions.entity';
 import { ProductsEntity } from './products/entities/products.entity';
 import { UserEntity } from './users/entities/user.entity';
 
-const ENTITIES = [BoothEntity, ComsuptionsEntity, ProductsEntity, UserEntity]
+const ENTITIES = [BoothEntity, ComsuptionsEntity, ProductsEntity, UserEntity];
 
 @Module({
   imports: [
@@ -23,12 +23,12 @@ const ENTITIES = [BoothEntity, ComsuptionsEntity, ProductsEntity, UserEntity]
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       entities: [...ENTITIES],
-      synchronize: true
+      synchronize: true,
     }),
     BoothModule,
     ComsuptionsModule,
     ProductsModule,
-    UsersModule
-  ]
+    UsersModule,
+  ],
 })
 export class AppModule {}

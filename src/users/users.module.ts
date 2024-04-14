@@ -9,6 +9,6 @@ import { BoothEntity } from 'src/booth/entities/booth.entity';
   controllers: [UsersController],
   imports: [TypeOrmModule.forFeature([UserEntity, BoothEntity])],
   providers: [UsersService],
-  exports: [TypeOrmModule]
+  exports: [TypeOrmModule],
 })
 export class UsersModule {}
