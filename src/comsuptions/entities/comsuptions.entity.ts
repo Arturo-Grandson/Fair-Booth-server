@@ -30,12 +30,12 @@ export class ComsuptionsEntity implements IComsuption {
   year: number;
 
   @ManyToOne(() => UserEntity, (user) => user.comsuptions)
-  user: UserEntity;
+  user: Promise<UserEntity>;
 
   @ManyToOne(() => BoothEntity, (booth) => booth.comsuptions)
-  booth: BoothEntity;
+  booth: Promise<BoothEntity>;
 
   @ManyToOne(() => ProductsEntity, (product) => product.comsuptions)
   @JoinColumn({ name: 'product_id' })
-  product: ProductsEntity;
+  product: Promise<ProductsEntity>;
 }
