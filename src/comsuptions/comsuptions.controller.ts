@@ -102,26 +102,42 @@ export class ComsuptionsController {
     type: ComsuptionsEntity
   })
   async getAllComsuptionsByUserYearAndBooth (
-    @Param(':userUuid') userUuid: string, 
-    @Param(':boothUuid') boothUuid: string,
+    @Param('userUuid') userUuid: string, 
+    @Param('boothUuid') boothUuid: string,
     @Param(':year') year: number
   ){
-    // console.log(userUuid)
-    const user = await this.userRepo.find({ where: {uuid: userUuid} })
-    const booth = await this.boothRepo.find({where: {uuid: boothUuid}})
+    const user = await this.userRepo.findOne( {where: { uuid: userUuid }} )
+    const booth = await this.boothRepo.findOne( {where: { uuid: boothUuid }} )
 
     const comsuptions = await this.comsuptionsRepo.find({
       where: {
-        booth: {uuid: boothUuid},
-        user: {uuid: userUuid},
+        user: {id: user.id},
+        booth: {id: booth.id},
         year: year
       }
     })
-    // console.log(Promise.resolve((await comsuptions[0].product).price))
-    // return await Promise.all(comsuptions.map(async (e) => {
-    //   return (await e.product).price
-    // }))
-    // console.log(comsuptions.map(async (comsuption) => (await comsuption.product).price))
-    return comsuptions
+
+    let quantity: number = 0
+    const comsuptionsMapped = comsuptions.map(async (c) => {
+      const products = await c.product
+      return {
+        name: products.name,
+        price: products.price
+      }
+    })
+
+    const allUserComsuption =  Promise.all(comsuptionsMapped)
+    // TODO: devolver la candidad del producto consumido, el precio por unidad y el precio total
+    const result = (await allUserComsuption).reduce((acc, curr) => {
+      if(!acc[curr.name]) {
+        acc[curr.name] = {count: 0, total: 0}
+      }
+
+      acc[curr.name].count += 1;
+      acc[curr.name].total += parseFloat(curr.price.toString())
+      return acc
+    }, {})
+
+    return result
   }
 }
