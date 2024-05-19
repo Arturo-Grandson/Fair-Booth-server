@@ -14,7 +14,7 @@ import { BoothEntity } from 'src/booth/entities/booth.entity';
 export interface IComsuption {
   id: number;
   uuid: string;
-  dateComsuption: number;
+  year: number;
 }
 
 @Entity({ name: 'comsuptions' })
@@ -27,15 +27,15 @@ export class ComsuptionsEntity implements IComsuption {
   uuid: string;
 
   @Column({ name: 'year' })
-  dateComsuption: number;
+  year: number;
 
   @ManyToOne(() => UserEntity, (user) => user.comsuptions)
-  user: UserEntity;
+  user: Promise<UserEntity>;
 
   @ManyToOne(() => BoothEntity, (booth) => booth.comsuptions)
-  booth: BoothEntity;
+  booth: Promise<BoothEntity>;
 
-  @OneToOne(() => ProductsEntity, (product) => product.comsuptions)
+  @ManyToOne(() => ProductsEntity, (product) => product.comsuptions)
   @JoinColumn({ name: 'product_id' })
-  product: ProductsEntity;
+  product: Promise<ProductsEntity>;
 }
