@@ -7,7 +7,6 @@ import { AddComsuptionDto } from './dto/add-comsuption.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { BoothEntity } from 'src/booth/entities/booth.entity';
 import { ProductsEntity } from 'src/products/entities/products.entity';
-import { FilterComsuptionDto } from './dto/filter-comsuption.dto';
 // import { filter } from 'rxjs';
 
 @ApiTags('Comsuptions')
@@ -104,7 +103,8 @@ export class ComsuptionsController {
   async getAllComsuptionsByUserYearAndBooth (
     @Param('userUuid') userUuid: string, 
     @Param('boothUuid') boothUuid: string,
-    @Param(':year') year: number
+    @Param(':year') year: number,
+    @Param('celebrationType') celebrationType: string
   ){
     const user = await this.userRepo.findOne( {where: { uuid: userUuid }} )
     const booth = await this.boothRepo.findOne( {where: { uuid: boothUuid }} )
@@ -113,11 +113,11 @@ export class ComsuptionsController {
       where: {
         user: {id: user.id},
         booth: {id: booth.id},
-        year: year
+        year: year,
+        celebrationType: celebrationType
       }
     })
 
-    let quantity: number = 0
     const comsuptionsMapped = comsuptions.map(async (c) => {
       const products = await c.product
       return {
