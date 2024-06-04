@@ -32,7 +32,7 @@ export class ComsuptionsEntity implements IComsuption {
   year: number;
 
   @IsIn(['sanjuan', 'feria'])
-  @Column({name: 'celebration'})
+  @Column({name: 'celebrationType'})
   celebrationType: string;
 
   @ManyToOne(() => UserEntity, (user) => user.comsuptions)

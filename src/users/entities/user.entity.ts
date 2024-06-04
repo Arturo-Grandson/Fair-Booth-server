@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { BoothEntity } from '../../booth/entities/booth.entity';
 import { ComsuptionsEntity } from '../../comsuptions/entities/comsuptions.entity';
+import { IsEmail, IsString, MinLength } from 'class-validator';
 
 export interface IUserEntity {
   id: number;
@@ -27,16 +28,22 @@ export class UserEntity implements IUserEntity {
   @Generated('uuid')
   uuid: string;
 
+  @IsString()
   @Column({ name: 'name' })
   name: string;
 
+  @IsString()
+  @IsEmail()
   @Column({ name: 'email', unique: true })
   email: string;
 
+  @IsString()
   @Column({ name: 'phone', unique: true })
   phone: string;
 
-  @Column({ name: 'pass' })
+  @IsString()
+  @MinLength(8)
+  @Column({ name: 'pass', select: false })
   pass: string;
 
   @ManyToMany(() => BoothEntity, (booth) => booth.users)

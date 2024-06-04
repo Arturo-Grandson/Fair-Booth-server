@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
@@ -15,6 +16,8 @@ import { AddUserDto } from './dto/add-user.dto';
 import { UserDto } from './dto/user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BoothEntity } from 'src/booth/entities/booth.entity';
+import * as bcrypt from 'bcrypt'
+import { LoginUserDto } from './dto/login-user.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -32,14 +35,13 @@ export class UsersController {
     description: 'Add a new User',
     type: AddUserDto,
   })
-  async addUser(@Body() user: AddUserDto): Promise<AddUserDto> {
-    console.log(user);
+  async create(@Body() user: AddUserDto) {
     if (!user.email) throw new BadRequestException('no hay email');
     const userEntity = new UserEntity();
     userEntity.name = user.name;
     userEntity.email = user.email;
     userEntity.phone = user.phone;
-    userEntity.pass = user.pass;
+    userEntity.pass = bcrypt.hashSync(user.pass, 10);
 
     const booth = await this.boothRepository.findOne({
       where: { uuid: user.boothUuid },
@@ -50,7 +52,34 @@ export class UsersController {
         `No se encuentra ninguna caseta con uuid: ${user.boothUuid}`,
       );
     userEntity.booths = [booth];
-    return await this.userRepository.save(userEntity);
+    await this.userRepository.save(userEntity);
+    delete user.pass;
+
+    return 'Usuario creado'
+
+    // TODO: Retornar JWT de acceso
+
+  }
+
+  @Post('login')
+  async loginUser(@Body() loginUserDto: LoginUserDto) {
+
+    const { pass, email } = loginUserDto;
+
+    const user = await this.userRepository.findOne({ 
+      where: {email},
+      select: {email: true, pass: true}
+     })
+
+    if(!user) throw new UnauthorizedException('Credentials are not valid (email)')
+
+    if(!bcrypt.compareSync(pass, user.pass))
+      throw new UnauthorizedException('Credentials are not valid (password)')
+
+    return user;
+
+    // TODO: retornar JWT
+
   }
 
   @Get('/users')

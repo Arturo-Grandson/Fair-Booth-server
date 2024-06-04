@@ -31,6 +31,7 @@ export class ComsuptionsController {
   async addComsuption(@Body() comsuption: AddComsuptionDto){
     let comsuptionEntity = new ComsuptionsEntity()
     comsuptionEntity.year = comsuption.year;
+    comsuptionEntity.celebrationType = comsuption.celebrationType
     
     comsuptionEntity.user = Promise.resolve(await this.userRepo.findOne({where: {id: comsuption.user}}))
     comsuptionEntity.booth = Promise.resolve(await this.boothRepo.findOne({where: {id: comsuption.booth}}))
@@ -40,7 +41,8 @@ export class ComsuptionsController {
     return {
       comsuption: { 
         uuid: comsuptionEntity.uuid,
-        year: comsuptionEntity.year
+        year: comsuptionEntity.year,
+        celebrationType: comsuptionEntity.celebrationType
       },
       user: {
         userUuid: (await comsuptionEntity.user).uuid,
@@ -64,7 +66,7 @@ export class ComsuptionsController {
     type: ComsuptionsEntity
   })
   async getAllComsuptions(){
-    return this.comsuptionsRepo.find({select: ['year', 'uuid']})
+    return this.comsuptionsRepo.find({select: ['year', 'uuid', 'celebrationType']})
   }
 
   @Get(':uuid')
@@ -95,7 +97,7 @@ export class ComsuptionsController {
     }
   }
   //TODO: Terminar este filtro
-  @Get(':userUuid/:boothUuid/:year')
+  @Get(':userUuid/:boothUuid/:year/:celebrationType')
   @ApiResponse({
     description: 'filter comsuption by userUuid, boothUuid and year',
     type: ComsuptionsEntity
@@ -103,7 +105,7 @@ export class ComsuptionsController {
   async getAllComsuptionsByUserYearAndBooth (
     @Param('userUuid') userUuid: string, 
     @Param('boothUuid') boothUuid: string,
-    @Param(':year') year: number,
+    @Param('year') year: number,
     @Param('celebrationType') celebrationType: string
   ){
     const user = await this.userRepo.findOne( {where: { uuid: userUuid }} )
