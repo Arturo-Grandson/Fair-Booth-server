@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BoothEntity } from '../entities/booth.entity';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/auth/entities/user.entity';
 import { ComsuptionsEntity } from 'src/comsuptions/entities/comsuptions.entity';
 
 export type TBoothDto = Omit<BoothEntity, 'id'>;

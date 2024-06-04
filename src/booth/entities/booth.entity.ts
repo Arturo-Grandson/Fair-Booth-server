@@ -7,7 +7,7 @@ import {
   OneToMany,
   JoinTable,
 } from 'typeorm';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/auth/entities/user.entity';
 import { ComsuptionsEntity } from 'src/comsuptions/entities/comsuptions.entity';
 
 export interface IBooth {
@@ -27,7 +27,7 @@ export class BoothEntity implements IBooth {
   @Generated('uuid')
   uuid: string;
 
-  @Column({ name: 'name' })
+  @Column({ name: 'name', unique: true })
   name: string;
 
   @ManyToMany(() => UserEntity, (user) => user.booths)

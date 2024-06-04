@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsIn, IsNotEmpty } from "class-validator";
 import { BoothEntity } from "src/booth/entities/booth.entity";
 import { ProductsEntity } from "src/products/entities/products.entity";
-import { UserEntity } from "src/users/entities/user.entity";
+import { UserEntity } from "src/auth/entities/user.entity";
 
 
 export class AddComsuptionDto {

@@ -7,7 +7,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/auth/entities/user.entity';
 import { ProductsEntity } from 'src/products/entities/products.entity';
 import { BoothEntity } from 'src/booth/entities/booth.entity';
 import { IsIn } from 'class-validator';

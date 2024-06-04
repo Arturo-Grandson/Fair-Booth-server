@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ComsuptionsEntity } from './entities/comsuptions.entity';
 import { Repository } from 'typeorm';
 import { AddComsuptionDto } from './dto/add-comsuption.dto';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/auth/entities/user.entity';
 import { BoothEntity } from 'src/booth/entities/booth.entity';
 import { ProductsEntity } from 'src/products/entities/products.entity';
 // import { filter } from 'rxjs';

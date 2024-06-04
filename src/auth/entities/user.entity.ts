@@ -52,3 +52,4 @@ export class UserEntity implements IUserEntity {
   @OneToMany(() => ComsuptionsEntity, (comsuption) => comsuption.user)
   comsuptions: ComsuptionsEntity[];
 }
+

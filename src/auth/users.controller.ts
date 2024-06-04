@@ -7,8 +7,9 @@ import {
   Patch,
   Post,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -18,6 +19,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { BoothEntity } from 'src/booth/entities/booth.entity';
 import * as bcrypt from 'bcrypt'
 import { LoginUserDto } from './dto/login-user.dto';
+import { JwtPayload } from './interfaces/jwt-payload.interfaces';
+import { JwtService } from '@nestjs/jwt';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Users')
 @Controller('users')
@@ -27,6 +31,7 @@ export class UsersController {
     private userRepository: Repository<UserDto>,
     @InjectRepository(BoothEntity)
     private boothRepository: Repository<BoothEntity>,
+    private jwtService: JwtService
   ) {}
 
   //TODO: Mejorar código.
@@ -63,7 +68,7 @@ export class UsersController {
 
   @Post('login')
   async loginUser(@Body() loginUserDto: LoginUserDto) {
-
+    
     const { pass, email } = loginUserDto;
 
     const user = await this.userRepository.findOne({ 
@@ -76,9 +81,29 @@ export class UsersController {
     if(!bcrypt.compareSync(pass, user.pass))
       throw new UnauthorizedException('Credentials are not valid (password)')
 
-    return user;
-
     // TODO: retornar JWT
+    return {
+      ...user,
+      token: this.getJwtToken({
+        email: user.email
+      })
+    };
+  }
+
+  @ApiBearerAuth('acces-token')  
+  @UseGuards(AuthGuard())
+  @Get('private')
+  testingPrivateRoute() {
+    return {
+      ok: true,
+      message: 'Hola Mundo private'
+    }
+  }
+
+  private getJwtToken(payload: JwtPayload){
+
+    const token = this.jwtService.sign(payload);
+    return token;
 
   }
 
