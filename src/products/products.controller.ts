@@ -12,7 +12,7 @@ export class ProductsController {
   constructor(
     @InjectRepository(ProductsEntity)
     private productsRepository: Repository<ProductsEntity>,
-  ) {}
+  ) {} 
 
   @Post('/product')
   @ApiResponse({
@@ -34,7 +34,7 @@ export class ProductsController {
   })
   async getAllProducts() {
     return this.productsRepository.find({
-      select: ['uuid', 'name', 'type', 'price'],
+      select: ['id', 'uuid', 'name', 'type', 'price'],
     });
   }
 
@@ -68,7 +68,10 @@ export class ProductsController {
     });
     if (!product) throw new Error('Product not found');
 
+    product.name = updateProduct.name ?? product.name;
+    product.type = updateProduct.type ?? product.type;
     product.price = updateProduct.price ?? product.price;
+    
     await this.productsRepository.save(product);
 
     return {

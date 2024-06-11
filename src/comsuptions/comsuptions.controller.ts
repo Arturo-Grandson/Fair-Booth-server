@@ -132,7 +132,7 @@ export class ComsuptionsController {
     // TODO: devolver la candidad del producto consumido, el precio por unidad y el precio total
     const result = (await allUserComsuption).reduce((acc, curr) => {
       if(!acc[curr.name]) {
-        acc[curr.name] = {count: 0, total: 0}
+        acc[curr.name] = {name: curr.name, count: 0, total: 0}
       }
 
       acc[curr.name].count += 1;
@@ -140,6 +140,8 @@ export class ComsuptionsController {
       return acc
     }, {})
 
-    return result
+    const formattedResult = Object.values(result)
+
+    return formattedResult
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BoothEntity } from './entities/booth.entity';
@@ -22,4 +22,14 @@ export class BoothController {
   async addBooth(@Param('name') name: string): Promise<BoothDto> {
     return BoothDto.fromEntity(await this.boothRepository.save({ name }));
   }
+
+  @Get('/booths')
+  @ApiResponse({
+    description: 'Get all booths',
+    type: BoothEntity,
+  })
+  async getAllBooths(): Promise<BoothEntity[]>{
+    return await this.boothRepository.find({})
+  }
+
 }

@@ -1,9 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UserEntity } from '../entities/user.entity';
 
-export type TUserDto = Omit<UserEntity, 'id' | 'booths' | 'comsuptions'>;
+export type TUserDto = Omit<UserEntity, 'booths' | 'comsuptions'>;
 
 export class UserDto implements TUserDto {
+  @ApiProperty({ required: false })
+  id: number = null as unknown as number
   @ApiProperty({ required: false })
   uuid: string = null as unknown as string;
   @ApiProperty({ required: false })

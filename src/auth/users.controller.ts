@@ -8,6 +8,7 @@ import {
   Post,
   UnauthorizedException,
   UseGuards,
+  Request
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
@@ -22,6 +23,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interfaces';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
+import { LoginResponse } from './interfaces/login-response';
 
 @ApiTags('Users')
 @Controller('users')
@@ -73,7 +75,7 @@ export class UsersController {
 
     const user = await this.userRepository.findOne({ 
       where: {email},
-      select: {email: true, pass: true}
+      select: {email: true, pass: true, uuid: true}
      })
 
     if(!user) throw new UnauthorizedException('Credentials are not valid (email)')
@@ -82,23 +84,54 @@ export class UsersController {
       throw new UnauthorizedException('Credentials are not valid (password)')
 
     // TODO: retornar JWT
+    const { pass:_, ...rest } =  user;
+
     return {
-      ...user,
-      token: this.getJwtToken({
-        email: user.email
-      })
+      // ...user,
+      // token: this.getJwtToken({
+      //   uuid: user.uuid
+      // })
+
+      user: rest,
+      token: this.getJwtToken({uuid: user.uuid})
     };
   }
 
-  @ApiBearerAuth('acces-token')  
   @UseGuards(AuthGuard())
-  @Get('private')
-  testingPrivateRoute() {
+  @Get('check-token')
+  checkToken(@Request() req: Request) {
+    const fullUser = req['user'];
+    const {email, uuid} = fullUser
+
     return {
-      ok: true,
-      message: 'Hola Mundo private'
+      email,
+      uuid,
+      token: this.getJwtToken({uuid: uuid})
     }
   }
+
+  // @UseGuards( AuthGuard )
+  // @Get('check-token')
+  // checkToken( @Request() req: Request ): LoginResponse {
+      
+  //   const user = req['user'] as UserDto;
+
+  //   return {
+  //     user,
+  //     token: this.getJwtToken({ uuid: user.uuid })
+  //   }
+
+  // }
+
+  // @ApiBearerAuth('acces-token')  
+  // @UseGuards(AuthGuard())
+  // @Get('private')
+  // testingPrivateRoute() {
+  //   return {
+  //     ok: true,
+  //     message: 'Hola Mundo private'
+  //   }
+  // }
 
   private getJwtToken(payload: JwtPayload){
 
@@ -107,6 +140,7 @@ export class UsersController {
 
   }
 
+
   @Get('/users')
   @ApiResponse({
     description: 'Get all users',
@@ -114,7 +148,7 @@ export class UsersController {
   })
   async getAllUsers(): Promise<UserDto[]> {
     return await this.userRepository.find({
-      select: ['uuid', 'name', 'email', 'phone'],
+      select: ['id', 'uuid', 'name', 'email', 'phone'],
     });
   }
 
@@ -126,7 +160,7 @@ export class UsersController {
   async getUser(@Param('uuid') uuid: string): Promise<UserDto> {
     return this.userRepository.findOne({
       where: { uuid: uuid },
-      select: ['uuid', 'name', 'email', 'phone'],
+      select: ['id' ,'uuid', 'name', 'email', 'phone'],
     });
   }
 
