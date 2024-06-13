@@ -78,20 +78,13 @@ export class UsersController {
       select: {email: true, pass: true, uuid: true}
      })
 
-    if(!user) throw new UnauthorizedException('Credentials are not valid (email)')
+    if(!user) throw new UnauthorizedException('Credentials are not valid')
 
     if(!bcrypt.compareSync(pass, user.pass))
-      throw new UnauthorizedException('Credentials are not valid (password)')
-
-    // TODO: retornar JWT
+      throw new UnauthorizedException('Credentials are not valid')
     const { pass:_, ...rest } =  user;
 
     return {
-      // ...user,
-      // token: this.getJwtToken({
-      //   uuid: user.uuid
-      // })
-
       user: rest,
       token: this.getJwtToken({uuid: user.uuid})
     };
@@ -110,36 +103,12 @@ export class UsersController {
     }
   }
 
-  // @UseGuards( AuthGuard )
-  // @Get('check-token')
-  // checkToken( @Request() req: Request ): LoginResponse {
-      
-  //   const user = req['user'] as UserDto;
-
-  //   return {
-  //     user,
-  //     token: this.getJwtToken({ uuid: user.uuid })
-  //   }
-
-  // }
-
-  // @ApiBearerAuth('acces-token')  
-  // @UseGuards(AuthGuard())
-  // @Get('private')
-  // testingPrivateRoute() {
-  //   return {
-  //     ok: true,
-  //     message: 'Hola Mundo private'
-  //   }
-  // }
-
   private getJwtToken(payload: JwtPayload){
 
     const token = this.jwtService.sign(payload);
     return token;
 
   }
-
 
   @Get('/users')
   @ApiResponse({
